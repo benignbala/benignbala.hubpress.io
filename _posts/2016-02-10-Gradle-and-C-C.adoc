@@ -1,16 +1,68 @@
 = Gradle and C/C++
 :hp-tags: Gradle, C, C++, Builds
 
-*Gradle* is an amazing build tool mainly for the Java/JVM ecosystem. It revolutionises the way build files/build scripts are written. Gradle is one of the two reasons that made me look at the Java ecosystem again, after a period of almost 10 years (the other being _The Groovy Programming Language_.) In the Java/JVM world, gradle is the best tool that we have got today. It deviates from the XML representaion of _Ant_ and _Maven_, and uses a proper *DSL* to represent the build. Moreover, it deviates from the traditional tools in another way - It is implemted in allows the use of a full fledged programming language (Groovy). 
+*Gradle* is an amazing general purpose build tool mainly for the Java/JVM ecosystem. It revolutionises the way build files/build scripts are written. Gradle is one of the two reasons that made me look at the Java ecosystem again, after a period of almost 10 years (the other being _The Groovy Programming Language_.) In the Java/JVM world, gradle is the best tool that we have got today. It deviates from the XML representaion of _Ant_ and _Maven_, and uses a proper *DSL* to represent the build. Moreover, it deviates from the traditional tools in another way - It is implemted in allows the use of a full fledged programming language (Groovy). 
 
 To build a simple/trivial Java or Groovy project, all that is needed in the build file is just the following one line.
 
 [source, groovy]
 ....
 // build.gradle
-apply plygin: 'java' // 'groovy' for groovy projects
+apply plugin: 'java' // 'groovy' for groovy projects
 ....
 
-That's a complete build file that automatically creates the build directory structure and the jars.
+That's a complete build file that automatically creates the build directory structure and the jars. For a more complicated project involving external dependencies, the build file is still very simple. Two sections get added to the build file - `repositories` and `dependencies`. The _respositories_ section tells where to fetch the dependency jars from and the _dependencies_  section tells what the dependencies are. An example would look like this.
 
+[source, groovy]
+....
+// build.gradle
+apply plugin: 'groovy'
 
+repositories {
+    jcenter()
+}
+
+dependencies {
+    compile 'org.codehaus.groovy:groovy-all:2.4.5'
+    testCompile 'org.spockframework:spock-core:1.0-groovy-2.4'
+}
+....
+
+That would fetch the dependencies for the project from Bintray(jcenter() is the preferred now). And build the project jars.
+
+As stated earlier, gradle is a general purpose build tool and it does support building native libraries and binaries in C and C++. In fact, it can build assember and Objective-C code too. From Makefiles to gradle files, the difference is huge. Gradle definitely reduces the complexity. But it is still not as smooth and effortless as gradle did it for the Java/JVM ecosystem.
+
+Agreed that we all need a change in the way we think of Native builds. But even with that in mind, the build.gradle files for C/C++ applications are a bit complicated.
+
+What would be nice is some thing like this.
+
+[source, groovy]
+....
+model {
+    module1(NativeLibrarySpec) {
+        /* srcPath or srcFiles or srcDir */
+        srcXXX {
+           include /a/b/c
+           exclude x, y, z
+        }
+        exportedHeaders *
+        output liboss-module1.o
+        libPath /usr/lib, /usr/local/lib, ~/lib
+        depends pthread,udns, m, modulex
+   }
+   
+    module2(NativeLibrarySpec) {
+
+		/* Some Settings */
+    }
+
+	Binary1(NativeBinarySpec) {
+        outputDir "/some/path"
+        libraries module1
+        depends pthread 
+    }
+
+}
+....
+
+Now that would be a veri simple and easy to use way to write build scripts :) Hopefully someone from @gradle will take a look at these coptions of writing the gradle C++/C build scripts.
