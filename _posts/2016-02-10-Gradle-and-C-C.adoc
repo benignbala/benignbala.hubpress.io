@@ -32,7 +32,7 @@ That would fetch the dependencies for the project from Bintray(jcenter() is the 
 
 As stated earlier, gradle is a general purpose build tool and it does support building native libraries and binaries in C and C++. In fact, it can build assember and Objective-C code too. From Makefiles to gradle files, the difference is huge. Gradle definitely reduces the complexity. But it is still not as smooth and effortless as gradle did it for the Java/JVM ecosystem.
 
-Agreed that we all need a change in the way we think of Native builds. But even with that in mind, the build.gradle files for C/C++ applications are a bit complicated.
+Agreed that we all need a change in the way we think of Native builds. But even after accounting for that, the build.gradle files for C/C++ applications are a bit complicated.
 
 What would be nice is some thing like this.
 
@@ -65,4 +65,4 @@ model {
 }
 ....
 
-Now that would be a veri simple and easy to use way to write build scripts :) Hopefully someone from @gradle will take a look at these coptions of writing the gradle C++/C build scripts.
+Now that would be a very simple and easy to use way to write build scripts :) Hopefully someone from @gradle will take a look at these coptions of writing the gradle C++/C build scripts.
