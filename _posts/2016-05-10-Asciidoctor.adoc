@@ -1,0 +1,3 @@
+= Asciidoctor!
+
+Asciidoctor is one major project that had a profound impact on the way I work in the past year. Especially, it changed the way I create documentaion for the projects that I work on. What used to take several hours earlier, now takes less than a third of it. And with gradle, revealjs and asciidoctor, creating presentations are as easy as creating a text file with a few lines of text.
