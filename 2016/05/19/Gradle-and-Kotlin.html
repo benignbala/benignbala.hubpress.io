@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <title>Gradle and Kotlin</title>
+    <meta name="description" content="" />
+
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="shortcut icon" href="//rants.balachandran.org/themes/Casper/favicon.ico">
+
+    <link rel="stylesheet" type="text/css" href="//rants.balachandran.org/themes/Casper/assets/css/screen.css?v=1.0.0" />
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic|Open+Sans:700,400" />
+
+    <link rel="canonical" href="http://rants.balachandran.org/2016/05/19/Gradle-and-Kotlin.html" />
+    
+    <meta property="og:site_name" content="An Unknown Indian" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="Gradle and Kotlin" />
+    <meta property="og:description" content="Hans Dockter announced today that Gradle build scripts can be written in Kotlin! The main reason being IDE support and scalability. Kotlin is a language for the JVM developed by the people at JetBrains, the creators of the IntelliJ IDEA..." />
+    <meta property="og:url" content="http://rants.balachandran.org/2016/05/19/Gradle-and-Kotlin.html" />
+    <meta property="article:published_time" content="2016-05-18T18:30:00.000Z" />
+    <meta property="article:modified_time" content="2016-05-18T19:58:32.280Z" />
+    
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Gradle and Kotlin" />
+    <meta name="twitter:description" content="Hans Dockter announced today that Gradle build scripts can be written in Kotlin! The main reason being IDE support and scalability. Kotlin is a language for the JVM developed by the people at JetBrains, the creators of the IntelliJ IDEA..." />
+    <meta name="twitter:url" content="http://rants.balachandran.org/2016/05/19/Gradle-and-Kotlin.html" />
+    
+    <script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Article",
+    "publisher": "An Unknown Indian",
+    "author": {
+        "@type": "Person",
+        "name": "Balachandran S",
+        "image": "https://avatars.githubusercontent.com/u/600098?v=3",
+        "url": "undefined/author/undefined",
+        "sameAs": "http://www.balachandran.org"
+    },
+    "headline": "Gradle and Kotlin",
+    "url": "http://rants.balachandran.org/2016/05/19/Gradle-and-Kotlin.html",
+    "datePublished": "2016-05-18T18:30:00.000Z",
+    "dateModified": "2016-05-18T19:58:32.280Z",
+    "description": "Hans Dockter announced today that Gradle build scripts can be written in Kotlin! The main reason being IDE support and scalability. Kotlin is a language for the JVM developed by the people at JetBrains, the creators of the IntelliJ IDEA..."
+}
+    </script>
+
+    <meta name="generator" content="Ghost ?" />
+    <link rel="alternate" type="application/rss+xml" title="An Unknown Indian" href="http://rants.balachandran.org/rss" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/default.min.css">
+</head>
+<body class="post-template">
+
+    
+
+
+<header class="main-header post-head no-cover">
+    <nav class="main-nav  clearfix">
+        <a class="back-button icon-arrow-left" href="http://rants.balachandran.org">Home</a>
+        <!-- <a class="subscribe-button icon-feed" href="http://rants.balachandran.org/rss/">Subscribe</a> -->
+    </nav>
+</header>
+
+<main class="content" role="main">
+
+    <article class="post">
+
+        <header class="post-header">
+            <h1 class="post-title">Gradle and Kotlin</h1>
+            <section class="post-meta">
+                <time class="post-date" datetime="2016-05-19">19 May 2016</time> 
+            </section>
+        </header>
+
+        <section class="post-content">
+            <div class="paragraph">
+<p>Hans Dockter announced today that Gradle build scripts can be written in Kotlin! The main reason being IDE support and scalability. Kotlin is a language for the JVM developed by the people at JetBrains, the creators of the IntelliJ IDEA IDE. So, it is fairly apparent what the "IDE support" here means. Additionally, the claim is that since Kotlin is a "statically typed" language, it is better for build scripts. It helps in performance, they say.</p>
+</div>
+<div class="paragraph">
+<p>So, what would a build script look like ?</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-groovy" data-lang="groovy">apply plugin: 'groovy'
+
+mailClassName = 'samples.HelloWorld'
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    compile 'org.codehaus.groovy:groovy-all:2.4.6'
+    testCompile 'junit:junit:4.1.2'
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>That&#8217;s how a build script in <strong>groovy/gradle</strong> looks like. Now, compare that against a build script in <strong>kotlin/gradle</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">import org.gradle.api.plugins.*
+import org.gradle.api.tasks.wrapper.*
+import org.gradle.script.lang.kotlin.*
+
+apply&lt;ApplicationPlugin&gt;()
+
+configure&lt;ApplicationPluginConvention&gt; {
+    mainClassName = "samples.HelloWorld"
+}
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    "testCompile"("junit:junit:4.12")
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>A truck-load of imports and then a whole lot of stuff that makes you think whether you are writing a buildscript or a templatised application!!!</p>
+</div>
+<div class="paragraph">
+<p>What&#8217;s worse is that Gradle, Inc. has announced that <em>kotlin</em> will be the preferred language for plugin development etc. going forward - I repeat, it is <strong>NOT</strong> <em>Groovy</em>, but <em>Kotlin</em>. This has  <strong>several</strong> drawbacks.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>The weirdness is visible right at the top - The import statements which were never necessary with Groovy.</p>
+</li>
+<li>
+<p>'apply&lt;ApplicationPlugin&gt;()' looks way too backward compared to 'apply plugin: groovy'</p>
+</li>
+<li>
+<p>The buildscript now looks <strong>ugly</strong> with all the types and angle brackets.</p>
+</li>
+<li>
+<p>The brevity and expressiveness that Groovy brought in is totally lost.</p>
+</li>
+<li>
+<p>Kotlin is not from a Free/Open Source organisation. Groovy is. From a very realiable one - The Apache Software Foundation. There is never going to be the fear of the language suddenly becoming fully proprietary.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>I agree that Kotlin is a nice language in itself, backed mainly by JetBrains. And it is a wonderful idea to add Kotlin support to create build scripts - But what is the necessity to ditch Groovy as the preferred language of choice ? I really don&#8217;t see a lot of seriously good motives here other than money. Seriously, why would anyone explicitly want a statically typed language for their build scripts ?</p>
+</div>
+<div class="paragraph">
+<p>A lot of questions remain to be answered. But this is my stand - If Gradle decided to deprioritise Apache Groovy, I will definitely move back to Scons( A very nice build tool written in Python). Another option is to have a community project to build a build system from the scratch, learning from the mistakes of Gradle and the previous generation build tools.</p>
+</div>
+        </section>
+
+        <footer class="post-footer">
+
+
+            <figure class="author-image">
+                <a class="img" href="" style="background-image: url(https://avatars.githubusercontent.com/u/600098?v=3)"><span class="hidden">Balachandran S's Picture</span></a>
+            </figure>
+
+            <section class="author">
+                <h4><a href="">Balachandran S</a></h4>
+
+                    <p>Read <a href="">more posts</a> by this author.</p>
+                <div class="author-meta">
+                    
+                    <span class="author-link icon-link"><a href="http://www.balachandran.org">http://www.balachandran.org</a></span>
+                </div>
+            </section>
+
+
+            <section class="share">
+                <h4>Share this post</h4>
+                <a class="icon-twitter" href="https://twitter.com/share?text=Gradle%20and%20Kotlin&amp;url=http://rants.balachandran.org/2016/05/19/Gradle-and-Kotlin.html"
+                    onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+                    <span class="hidden">Twitter</span>
+                </a>
+                <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://rants.balachandran.org/2016/05/19/Gradle-and-Kotlin.html"
+                    onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+                    <span class="hidden">Facebook</span>
+                </a>
+                <a class="icon-google-plus" href="https://plus.google.com/share?url=http://rants.balachandran.org/2016/05/19/Gradle-and-Kotlin.html"
+                   onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+                    <span class="hidden">Google+</span>
+                </a>
+            </section>
+
+        </footer>
+
+
+    </article>
+
+</main>
+
+
+
+    <footer class="site-footer clearfix">
+        <section class="copyright"><a href="http://rants.balachandran.org">An Unknown Indian</a> &copy; 2016</section>
+        <section class="poweredby">Proudly published with <a href="http://hubpress.io">HubPress</a></section>
+    </footer>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js?v="></script> <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.min.js?v="></script> <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js?v="></script> 
+      <script type="text/javascript">
+        jQuery( document ).ready(function() {
+          // change date with ago
+          jQuery('ago.ago').each(function(){
+            var element = jQuery(this).parent();
+            element.html( moment(element.text()).fromNow());
+          });
+        });
+
+        hljs.initHighlightingOnLoad();      
+      </script>
+
+    <script type="text/javascript" src="//rants.balachandran.org/themes/Casper/assets/js/jquery.fitvids.js?v=1.0.0"></script>
+    <script type="text/javascript" src="//rants.balachandran.org/themes/Casper/assets/js/index.js?v=1.0.0"></script>
+
+</body>
+</html>
