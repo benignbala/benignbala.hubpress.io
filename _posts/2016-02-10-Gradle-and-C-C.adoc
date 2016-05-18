@@ -65,4 +65,4 @@ model {
 }
 ....
 
-Now that would be a very simple and easy to use way to write build scripts :) Hopefully someone from @gradle will take a look at these coptions of writing the gradle C++/C build scripts.
+Now that would be a very simple and easy to use way to write build scripts :) Hopefully someone from @gradle will consider these suggestions towards creating gradle C++/C build scripts.
