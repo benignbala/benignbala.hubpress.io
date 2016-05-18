@@ -1,0 +1,58 @@
+= Gradle and Kotlin
+
+Hans Dockter announced today that Gradle build scripts can be written in Kotlin! The main reason being IDE support and scalability. Kotlin is a language for the JVM developed by the people at JetBrains, the creators of the IntelliJ IDEA IDE. So, it is fairly apparent what the "IDE support" here means. Additionally, the claim is that since Kotlin is a "statically typed" language, it is better for build scripts. It helps in performance, they say.
+
+So, what would a build script look like ?
+
+[source, groovy]
+....
+apply plugin: 'groovy'
+
+mailClassName = 'samples.HelloWorld'
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    compile 'org.codehaus.groovy:groovy-all:2.4.6'
+    testCompile 'junit:junit:4.1.2'
+}
+....
+
+That's how a build script in *groovy/gradle* looks like. Now, compare that against a build script in *kotlin/gradle*
+
+[source, java]
+....
+import org.gradle.api.plugins.*
+import org.gradle.api.tasks.wrapper.*
+import org.gradle.script.lang.kotlin.*
+
+apply<ApplicationPlugin>()
+
+configure<ApplicationPluginConvention> {
+    mainClassName = "samples.HelloWorld"
+}
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    "testCompile"("junit:junit:4.12")
+}
+....
+
+A truck-load of imports and then a whole lot of stuff that makes you think whether you are writing a buildscript or a templatised application!!!
+
+What's worse is that Gradle, Inc. has announced that _kotlin_ will be the preferred language for plugin development etc. going forward - I repeat, it is *NOT* _Groovy_, but _Kotlin_. This has  *several* drawbacks.
+
+. The weirdness is visible right at the top - The import statements which were never necessary with Groovy.
+. 'apply<ApplicationPlugin>()' looks way too backward compared to 'apply plugin: groovy'
+. The buildscript now looks *ugly* with all the types and angle brackets.
+. The brevity and expressiveness that Groovy brought in is totally lost.
+. Kotlin is not from a Free/Open Source organisation. Groovy is. From a very realiable one - The Apache Software Foundation. There is never going to be the fear of the language suddenly becoming fully proprietary.
+
+I agree that Kotlin is a nice language in itself, backed mainly by JetBrains. And it is a wonderful idea to add Kotlin support to create build scripts - But what is the necessity to ditch Groovy as the preferred language of choice ? I really don't see a lot of seriously good motives here other than money. Seriously, why would anyone explicitly want a statically typed language for their build scripts ? 
+
+A lot of questions remain to be answered. But this is my stand - If Gradle decided to deprioritise Apache Groovy, I will definitely move back to Scons( A very nice build tool written in Python). Another option is to have a community project to build a build system from the scratch, learning from the mistakes of Gradle and the previous generation build tools.
